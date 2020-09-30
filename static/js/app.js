@@ -13,11 +13,22 @@ const url = "../samples.json";
 d3.json(url).then(function(data) {
   //console.log(data);
     var bbMetaData = data.metadata;
-    //console.log(bbMetaData);
+    console.log("MetaData");
+    console.log(bbMetaData);
+    console.log("bbNames");
     var bbNames = data.names;
-    //console.log(bbNames);
+    console.log(bbNames);
+    console.log("bbSamples");
     var bbSamples = data.samples;
     console.log(bbSamples);
+
+    var subject = 955;
+    var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
+    console.log(dataMeta);
+
+    var dataSamples = bbSamples.filter(data =>parseInt(data.id) === subject);
+    console.log(dataSamples);
+    console.log(dataSamples[0].otu_ids);
 });
 
 
