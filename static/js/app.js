@@ -40,9 +40,10 @@ d3.json(url).then(function(data) {
     console.log(otuLabels);
 
     var trace1 = {
-      x: otuIdsString,
-      y: sampleValues,
+      x: sampleValues.reverse(),
+      y: otuIdsString.reverse(),
       type: "bar",
+      orientation: "h",
       text: otuLabels
     };
 
@@ -50,8 +51,8 @@ d3.json(url).then(function(data) {
   
   var layout = {
     title: `Plot of Counts vs otu_id for ${subject}`,
-        xaxis: {title: "otu_id", type:"category"},
-    yaxis: {title: "counts of otu", gridwidth: 2},
+        xaxis: {title: "otu_id"},
+    yaxis: {title: "counts of otu" , type:"category", gridwidth: 2},
     bargap:0.05
   };
 
