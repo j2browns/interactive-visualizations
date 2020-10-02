@@ -9,7 +9,16 @@
 
 const url = "../samples.json";
 
+//Getting values for pop down menu
+d3.json(url).then(function(data) {
+    var bbNames = data.names;//extracting test subject ID
+    selectPopMenu(bbNames); //call routine to populate drop down
+});
+d3.selectAll("#selDataset").on("change", updatePage);
+
+
 // Fetch the JSON data and console log it
+function updatePage() {
 d3.json(url).then(function(data) {
   //console.log(data);
     var bbMetaData = data.metadata;
@@ -22,7 +31,11 @@ d3.json(url).then(function(data) {
     var bbSamples = data.samples;
     console.log(bbSamples);
 
-    var subject = 955;
+    //Getting Test Subject ID number
+    var dropdownMenu = d3.select("#selDataset");
+    var subject = +dropdownMenu.property("value");
+
+    //var subject = 955;
     var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
     console.log(dataMeta);
 
@@ -100,5 +113,20 @@ d3.json(url).then(function(data) {
 // Promise Pending
 const bbData = d3.json(url); 
 console.log("Belly Button Data: ", bbData);
+};
 
+//Function  - populate shape pull down
+function selectPopMenu(arrayList) {
 
+  //select the "select" callout in html
+  var selectMenu = d3.select("select");
+  //append option under select
+  var row = selectMenu.append("option");
+  //filling text field for option
+  row.text("-None-");
+  for (i = 0; i<arrayList.length; i++) {
+    var row = selectMenu.append("option");
+    //populate list value for select menue from arrayList passed to function
+    row.text(arrayList[i]);
+        };
+ };
