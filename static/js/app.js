@@ -22,7 +22,7 @@ d3.json(url).then(function(data) {
     var bbSamples = data.samples;
     console.log(bbSamples);
 
-    var subject = 1258;
+    var subject = 955;
     var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
     console.log(dataMeta);
 
@@ -58,6 +58,30 @@ d3.json(url).then(function(data) {
 
   Plotly.newPlot("bar", data, layout);
 
+  //********* creating bubble chart */
+  var trace1 = {
+    x: dataSamples[0].otu_ids,
+    y: dataSamples[0].sample_values,
+    mode: 'markers',
+    marker: {
+      
+      color: (dataSamples[0].otu_ids),
+      size: dataSamples[0].sample_values
+    },
+    text: dataSamples[0].otu_labels
+    
+  };
+  
+  var data = [trace1];
+  
+  var layout = {
+    title: 'otu Counts versus otu ID',
+    showlegend: false,
+    height: 600,
+    width: 1000
+  };
+  
+  Plotly.newPlot('bubble', data, layout);
 
 });
 
