@@ -59,13 +59,21 @@ d3.json(url).then(function(data) {
   Plotly.newPlot("bar", data, layout);
 
   //********* creating bubble chart */
+
+  colors = (dataSamples[0].otu_ids).map(data=>(data/3000*255));
+
   var trace1 = {
     x: dataSamples[0].otu_ids,
     y: dataSamples[0].sample_values,
     mode: 'markers',
     marker: {
-      
-      color: (dataSamples[0].otu_ids),
+      colorscale:[
+        ['0','rgb(255,0,0)'],
+        ['0.5','rgb(0,255,0)'],
+        ['1','rgb(0,0,255)']
+          
+          ],
+      color: colors,
       size: dataSamples[0].sample_values
     },
     text: dataSamples[0].otu_labels
@@ -78,7 +86,7 @@ d3.json(url).then(function(data) {
     title: 'otu Counts versus otu ID',
     showlegend: false,
     height: 600,
-    width: 1000
+    width: 800
   };
   
   Plotly.newPlot('bubble', data, layout);
