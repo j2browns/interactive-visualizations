@@ -6,7 +6,7 @@
 // var bbData = JSON.parse(samples);
 //console.log(bbData);
 
-
+//Setting path to json
 const url = "../samples.json";
 
 //Getting values for pop down menu
@@ -14,7 +14,9 @@ d3.json(url).then(function(data) {
     var bbNames = data.names;//extracting test subject ID
     selectPopMenu(bbNames); //call routine to populate drop down
 });
-d3.selectAll("#selDataset").on("change", updatePage);
+
+// event handler to sense when test subject ID is selected
+d3.selectAll("#selDataset").on("change", updatePage); 
 
 
 // Fetch the JSON data and console log it
@@ -22,14 +24,14 @@ function updatePage() {
 d3.json(url).then(function(data) {
   //console.log(data);
     var bbMetaData = data.metadata;
-    console.log("MetaData");
-    console.log(bbMetaData);
-    console.log("bbNames");
+    //console.log("MetaData");
+    //console.log(bbMetaData);
+    //console.log("bbNames");
     var bbNames = data.names;
-    console.log(bbNames);
-    console.log("bbSamples");
+    //console.log(bbNames);
+    //console.log("bbSamples");
     var bbSamples = data.samples;
-    console.log(bbSamples);
+    //console.log(bbSamples);
 
     //Getting Test Subject ID number
     var dropdownMenu = d3.select("#selDataset");
@@ -39,18 +41,32 @@ d3.json(url).then(function(data) {
     var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
     console.log(dataMeta);
 
+    //Getting data from json
     var dataSamples = bbSamples.filter(data =>parseInt(data.id) === subject);
-    console.log(dataSamples);
-    console.log(dataSamples[0].otu_ids);
+    //console.log(dataSamples);
+    //console.log(dataSamples[0].otu_ids);
 
+    
+
+    //Populating demographic information
+    var demogKeys = Object.keys(dataMeta[0]);
+    console.log(demogKeys);
+    var demogVal = Object.values(dataMeta[0]);
+    var demogPanel = d3.select("#sample-metadata");
+    for (i=0; i<demogKeys.length; i++) {
+      var para = demogPanel.append("p");
+      para.text(`${(demogKeys[i])} = ${demogVal[i]}`)
+    };
+    
+    // Slicing data for horizontal bar plot
     var otuIds = dataSamples[0].otu_ids.slice(0, 10);
     var otuIdsString = otuIds.map(number => number.toString());
-    console.log(otuIds);
-    console.log(otuIdsString);
+    //console.log(otuIds);
+    //console.log(otuIdsString);
     var sampleValues = dataSamples[0].sample_values.slice(0, 10);
-    console.log(sampleValues);
+    //console.log(sampleValues);
     var otuLabels = dataSamples[0].otu_labels.slice(0, 10);
-    console.log(otuLabels);
+    //console.log(otuLabels);
 
     //***********Plotting Horizontal Bar Chart ***********/
     var trace1 = {
