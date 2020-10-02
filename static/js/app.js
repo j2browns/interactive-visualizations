@@ -39,6 +39,7 @@ d3.json(url).then(function(data) {
     var otuLabels = dataSamples[0].otu_labels.slice(0, 10);
     console.log(otuLabels);
 
+    //***********Plotting Horizontal Bar Chart ***********/
     var trace1 = {
       x: sampleValues.reverse(),
       y: otuIdsString.reverse(),
@@ -51,14 +52,14 @@ d3.json(url).then(function(data) {
   
   var layout = {
     title: `Plot of Counts vs otu_id for ${subject}`,
-        xaxis: {title: "otu_id"},
+    xaxis: {title: "otu_id"},
     yaxis: {title: "counts of otu" , type:"category", gridwidth: 2},
     bargap:0.05
   };
 
   Plotly.newPlot("bar", data, layout);
 
-  //********* creating bubble chart */
+  //********* Creating Bubble Chart ********************/
 
   colors = (dataSamples[0].otu_ids).map(data=>(data/3000*255));
 
@@ -68,9 +69,9 @@ d3.json(url).then(function(data) {
     mode: 'markers',
     marker: {
       colorscale:[
-        ['0','rgb(255,0,0)'],
+        ['0','rgb(0,0,255)'],
         ['0.5','rgb(0,255,0)'],
-        ['1','rgb(0,0,255)']
+        ['1','rgb(255,0,0)']
           
           ],
       color: colors,
@@ -84,6 +85,8 @@ d3.json(url).then(function(data) {
   
   var layout = {
     title: 'otu Counts versus otu ID',
+    xaxis: {title:"otu ID"},
+    yaxis: {title:"otu Counts in Sample"},
     showlegend: false,
     height: 600,
     width: 800
