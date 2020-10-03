@@ -91,6 +91,43 @@ d3.json(url).then(function(data) {
 
   Plotly.newPlot("bar", data, layout);
 
+  //*******************creating gauge chart**********************/
+  var data = [
+    {
+      domain: {x:[0,1], y:[0,1]},
+      type: "indicator",
+      value: +dataMeta[0].wfreq,
+      gauge: { axis: { visible: true, range: [0, 10] } ,
+              steps:[ {range: [0,2], color: "red"},
+                      {range: [2,4], color: "orange"},
+                      {range:[4,7], color: "yellow" },
+                      {range:[7,10], color: "lightgreen"}
+              ]
+            },
+
+    }
+    ];
+    var layout = {
+      width: 400,
+      height: 200,
+      margin: { t: 50, b: 50, l: 50, r: 50 },
+      template:
+      {
+        data: 
+        {
+          indicator:
+          [
+            {
+              title: {text: "wash freq"},
+              mode: "number+gauge"
+            }
+          ]
+        }
+      }
+    };
+
+    Plotly.newPlot('gauge', data, layout);
+
   //********* Creating Bubble Chart ********************/
 
   colors = (dataSamples[0].otu_ids).map(data=>(data/3000*255));
