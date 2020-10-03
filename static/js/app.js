@@ -1,60 +1,52 @@
 //Homework 15 Interactive Visualizations
 
-// fetch(".\samples.json")
-    // .then(response => response.json())
-    // .then(json => console.log(json));
-// var bbData = JSON.parse(samples);
-//console.log(bbData);
-
+//************************************************/
+//************ Connecting to JSON ****************/
 //Setting path to json
 const url = "../samples.json";
 
-//Getting values for pop down menu
+//Getting values for pop down menu from JSON Data
 d3.json(url).then(function(data) {
-    var bbNames = data.names;//extracting test subject ID
-    selectPopMenu(bbNames); //call routine to populate drop down
+    var bbNames = data.names;//extracting test subject ID list
+    selectPopMenu(bbNames); //call Function to populate drop down
 });
 
 // event handler to sense when test subject ID is selected
 d3.selectAll("#selDataset").on("change", updatePage); 
 
+// var button = d3.select("#filter-btn");//check button for filtering data
+// button.on("click", dataFilter);
 
-// Fetch the JSON data and console log it
+// *****************************************************************************/
+// ********** Function that plots graphs and updates demographic info**********/
+//************function called when any value selected from drop down **********/
+
 function updatePage() {
 d3.json(url).then(function(data) {
-  //console.log(data);
-    var bbMetaData = data.metadata;
-    //console.log("MetaData");
-    //console.log(bbMetaData);
-    //console.log("bbNames");
-    var bbNames = data.names;
-    //console.log(bbNames);
-    //console.log("bbSamples");
-    var bbSamples = data.samples;
-    //console.log(bbSamples);
+    var bbMetaData = data.metadata; //contains demographic information
+    var bbSamples = data.samples; //array containing sample data
 
     //Getting Test Subject ID number
     var dropdownMenu = d3.select("#selDataset");
-    var subject = +dropdownMenu.property("value");
+    var subject = +dropdownMenu.property("value");//will contain the test subject ID
 
-    //var subject = 955;
+    //code below finds selected patient meta (demographic) data using filtering
     var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
     console.log(dataMeta);
 
-    //Getting data from json
+    //code below finds selected patient data using filtering
     var dataSamples = bbSamples.filter(data =>parseInt(data.id) === subject);
-    //console.log(dataSamples);
-    //console.log(dataSamples[0].otu_ids);
-
     
 
-    //Populating demographic information
+    //getting demographic key data
     var demogKeys = Object.keys(dataMeta[0]);
-    //console.log(demogKeys);
+    //getting data for values of matching keys
     var demogVal = Object.values(dataMeta[0]);
 
+    //remove all paragraph fields from section of html (ie clear prior data)
     var demog = d3.select("#sample-metadata").selectAll("p").remove(); 
     
+    //select region where demographic 
     var demogPanel = d3.select("#sample-metadata");
     for (i=0; i<demogKeys.length; i++) {
       var para = demogPanel.append("p");
@@ -71,6 +63,7 @@ d3.json(url).then(function(data) {
     var otuLabels = dataSamples[0].otu_labels.slice(0, 10);
     //console.log(otuLabels);
 
+    //****************************************************/
     //***********Plotting Horizontal Bar Chart ***********/
     var trace1 = {
       x: sampleValues.reverse(),
@@ -108,8 +101,8 @@ d3.json(url).then(function(data) {
     }
     ];
     var layout = {
-      width: 400,
-      height: 200,
+      width: 500,
+      height: 350,
       margin: { t: 50, b: 50, l: 50, r: 50 },
       template:
       {
@@ -118,7 +111,7 @@ d3.json(url).then(function(data) {
           indicator:
           [
             {
-              title: {text: "wash freq"},
+              title: {text: "Wash Frequency"},
               mode: "number+gauge"
             }
           ]

@@ -13,18 +13,24 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-12 jumbotron text-center" style = "background: url(./images/bacteria-bkgnd.jpg); background-size: cover; ">
+      <div class="col-md-12 jumbotron text-center" style = "background: url(./images/bacteria-bkgnd.jpg);  ">
         <h1 style = "color:whitesmoke">Belly Button Biodiversity Dashboard</h1>
         <p style = "color:whitesmoke">Use the interactive charts below to explore the dataset</p>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2">
-        <div class="well">
-          <h5>Test Subject ID No.:</h5>
+      <div class="col-md-2" >
+        <div class="well" style = "background: url(./images/bacteria-bkgnd.jpg)">
+          <h5 style = "color:whitesmoke">Test Subject ID No.:</h5>
           <select id = "selDataset"></select>
           <!-- <select id="selDataset" onchange="optionChanged(this.value)"></select> -->
         </div>
+        <center>
+          <!-- <button id="filter-btn" type="button" class="btn btn-info">Full Data Analysis</button> -->
+          <a href="full_data.html" class="btn btn-primary" role="button">Full Data Analysis</a>
+        </center>
+        <p><br></p>
+
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Demographic Info</h3>
@@ -44,7 +50,9 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div id="bubble"></div>
+        <center>
+          <div id="bubble"></div>
+        </center>
       </div>
     </div>
   </div>
