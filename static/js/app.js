@@ -50,8 +50,11 @@ d3.json(url).then(function(data) {
 
     //Populating demographic information
     var demogKeys = Object.keys(dataMeta[0]);
-    console.log(demogKeys);
+    //console.log(demogKeys);
     var demogVal = Object.values(dataMeta[0]);
+
+    var demog = d3.select("#sample-metadata").selectAll("p").remove(); 
+    
     var demogPanel = d3.select("#sample-metadata");
     for (i=0; i<demogKeys.length; i++) {
       var para = demogPanel.append("p");
