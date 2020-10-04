@@ -25,14 +25,14 @@ function updatePage() {
 d3.json(url).then(function(data) {
     var bbMetaData = data.metadata; //contains demographic information
     var bbSamples = data.samples; //array containing sample data
-
+    console.log(bbSamples); //included for trouble shooting and validating data
     //Getting Test Subject ID number
     var dropdownMenu = d3.select("#selDataset");
     var subject = +dropdownMenu.property("value");//will contain the test subject ID
 
     //code below finds selected subject meta (demographic) data using filtering
     var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
-    console.log(dataMeta);
+    console.log(dataMeta); //included to validate data and troubleshoot
 
     //code below finds selected Subject data using filtering
     var dataSamples = bbSamples.filter(data =>parseInt(data.id) === subject);
@@ -60,9 +60,9 @@ d3.json(url).then(function(data) {
     var otuIds = dataSamples[0].otu_ids.slice(0, 10);//getting otuIds
     var otuIdsString = otuIds.map(number => number.toString());//converting otu's to string
     
-    var sampleValues = dataSamples[0].sample_values.slice(0, 10); /getting data counts top 10
+    var sampleValues = dataSamples[0].sample_values.slice(0, 10); //getting data counts top 10
     
-    var otuLabels = dataSamples[0].otu_labels.slice(0, 10); /getting labels for OTU's
+    var otuLabels = dataSamples[0].otu_labels.slice(0, 10); //getting labels for OTU's
     
     //Setting trace data
     var trace1 = {
@@ -76,9 +76,9 @@ d3.json(url).then(function(data) {
     var data = [trace1];
   
     var layout = {
-      title: `Plot of Counts vs otu_id for ${subject}`,
-      xaxis: {title: "otu_id"},
-      yaxis: {title: "counts of otu" , type:"category", gridwidth: 2},
+      title: `Plot of Counts vs OTU_id for ${subject}`,
+      xaxis: {title: "counts of OTU"},
+      yaxis: {title: "OTU_id" , type:"category", gridwidth: 2},
       bargap:0.05
     };
 
@@ -111,7 +111,7 @@ d3.json(url).then(function(data) {
           indicator:
           [
             {
-              title: {text: "Wash Frequency"},
+              title: {text: "Belly Button<br>Wash Frequency"},
               mode: "number+gauge"
             }
           ]
@@ -125,6 +125,9 @@ d3.json(url).then(function(data) {
 
   // in color data need to set range of values and colors in rgb.  number (like 0.5) is decimal percent
   // of full scale.
+
+  colors = (dataSamples[0].otu_ids).map(data=>(data/3000*255));
+
   var trace1 = {
     x: dataSamples[0].otu_ids,
     y: dataSamples[0].sample_values,
@@ -137,6 +140,7 @@ d3.json(url).then(function(data) {
           
                   ],
       color: colors,
+      
       size: dataSamples[0].sample_values
               },
     text: dataSamples[0].otu_labels
@@ -146,9 +150,9 @@ d3.json(url).then(function(data) {
   var data = [trace1];
   
   var layout = {
-    title: 'otu Counts versus ID Number',
-    xaxis: {title:"otu ID"},
-    yaxis: {title:"otu Counts in Sample"},
+    title: 'OTU Counts versus ID Number',
+    xaxis: {title:"OTU ID"},
+    yaxis: {title:"OTU Counts in Sample"},
     showlegend: false,
     height: 600,
     width: 800

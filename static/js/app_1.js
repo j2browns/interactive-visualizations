@@ -8,41 +8,31 @@
 //Setting path to json
 const url = "../samples.json";
 
-
+//getting data to generate new plots
 d3.json(url).then(function(data) {
     var bbMetaData = data.metadata; //contains demographic information
     var bbSamples = data.samples; //array containing sample data
-    console.log(bbSamples);
-    console.log(bbSamples[3].sample_values);
-    console.log(d3.sum(bbSamples[3].sample_values));
-
+    
     //*************creating plot of wash frequency **********************************/
     //code below gets data for wash frequency and total bacteria count
     //code below finds selected patient meta (demographic) data using filtering
     var bbWash = bbMetaData.map(data =>parseInt(data.wfreq));
-    console.log("original bbwash array");
-    console.log(bbWash);
-    var totalBacteria = bbSamples.map(data => d3.sum(data.sample_values));
-    console.log("original sum bacteria array");
-    console.log(totalBacteria);
-    console.log(bbWash[7]);
-    console.log( Boolean(bbWash[7]));
-
+    
+    var totalBacteria = bbSamples.map(data => d3.sum(data.sample_values)); //using d3 to get the sum
+    
     //getting rid of NaN from wash frequency data
+    // since Boolean(bbWash) is false for zero too need to check for zeros
     for (var i = 0; i<bbWash.length; i++){
         if(bbWash[i] != 0) {
-            if (!(Boolean(bbWash[i]))){
-                bbWash.splice(i,1);
+            if (!(Boolean(bbWash[i]))){ //removes NaN and other false data
+                bbWash.splice(i,1); //use of splice keeps remainder intact
                 totalBacteria.splice(i,1);
-                i-=1;
+                i-=1; //have to decrement i since shifted data by one point
             }
         }
     };
-    console.log("filtered bbwash array");
-    console.log(bbWash);
-    console.log("filtered sum bacteria array");
-    console.log(totalBacteria);
 
+//set up trace with type of box plot
 var trace1 = {
     x:bbWash,
     y:totalBacteria,
@@ -66,12 +56,14 @@ Plotly.newPlot("wash", data, layout);
 
  //code below finds selected patient meta (demographic) data using mapping
  //also gets the total bacteria count
+//Even though get total counts above the data is filtered by NaN which may not be 
+//valid in this dataset
 
-var bbGender = bbMetaData.map(data =>(data.gender));
-var totalBactGend = bbSamples.map(data => d3.sum(data.sample_values));
+var bbGender = bbMetaData.map(data =>(data.gender));//getting gender
+var totalBactGend = bbSamples.map(data => d3.sum(data.sample_values)); // getting counts
 
 
- //getting rid of NaN from wash frequency data
+ //getting rid of NaN from gender data
  for (var i = 0; i<bbGender.length; i++){
     if(bbGender[i] != 0) {
         if (!(Boolean(bbGender[i]))){
@@ -82,7 +74,7 @@ var totalBactGend = bbSamples.map(data => d3.sum(data.sample_values));
     }
  };
 
- bbGender = bbGender.map(data=>data.toUpperCase());
+ bbGender = bbGender.map(data=>data.toUpperCase()); //some gender reported caps, some lower, make all upper
 
  var trace1 = {
     x:bbGender,
@@ -100,14 +92,6 @@ var layout = {
 };
 
 Plotly.newPlot("gender", data, layout);
-
-
-
-
-
-
-
-
 
     // Promise Pending
 const bbData = d3.json(url); 
