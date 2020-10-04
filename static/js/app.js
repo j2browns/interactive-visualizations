@@ -3,7 +3,7 @@
 //************************************************/
 //************ Connecting to JSON ****************/
 //Setting path to json
-const url = "../samples.json";
+const url = "..data/samples.json";
 
 //Getting values for pop down menu from JSON Data
 d3.json(url).then(function(data) {
