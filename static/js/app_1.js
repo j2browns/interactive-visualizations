@@ -6,7 +6,7 @@
 //************************************************/
 //************ Connecting to JSON ****************/
 //Setting path to json
-const url =  "../../data/samples.json";
+const url =  "data/samples.json";
 
 //getting data to generate new plots
 d3.json(url).then(function(data) {
