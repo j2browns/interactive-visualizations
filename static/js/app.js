@@ -12,10 +12,10 @@ d3.json(url).then(function(data) {
 });
 
 // event handler to sense when test subject ID is selected
+// when selected calls function to draw graphs
 d3.selectAll("#selDataset").on("change", updatePage); 
 
-// var button = d3.select("#filter-btn");//check button for filtering data
-// button.on("click", dataFilter);
+
 
 // *****************************************************************************/
 // ********** Function that plots graphs and updates demographic info**********/
@@ -30,14 +30,14 @@ d3.json(url).then(function(data) {
     var dropdownMenu = d3.select("#selDataset");
     var subject = +dropdownMenu.property("value");//will contain the test subject ID
 
-    //code below finds selected patient meta (demographic) data using filtering
+    //code below finds selected subject meta (demographic) data using filtering
     var dataMeta = bbMetaData.filter(data =>parseInt(data.id) === subject);
     console.log(dataMeta);
 
-    //code below finds selected patient data using filtering
+    //code below finds selected Subject data using filtering
     var dataSamples = bbSamples.filter(data =>parseInt(data.id) === subject);
     
-
+    //*************Populating Demographic Panel********************* */
     //getting demographic key data
     var demogKeys = Object.keys(dataMeta[0]);
     //getting data for values of matching keys
@@ -53,18 +53,18 @@ d3.json(url).then(function(data) {
       para.text(`${(demogKeys[i])} = ${demogVal[i]}`)
     };
     
-    // Slicing data for horizontal bar plot
-    var otuIds = dataSamples[0].otu_ids.slice(0, 10);
-    var otuIdsString = otuIds.map(number => number.toString());
-    //console.log(otuIds);
-    //console.log(otuIdsString);
-    var sampleValues = dataSamples[0].sample_values.slice(0, 10);
-    //console.log(sampleValues);
-    var otuLabels = dataSamples[0].otu_labels.slice(0, 10);
-    //console.log(otuLabels);
 
     //****************************************************/
     //***********Plotting Horizontal Bar Chart ***********/
+    // Slicing data for horizontal bar plot
+    var otuIds = dataSamples[0].otu_ids.slice(0, 10);//getting otuIds
+    var otuIdsString = otuIds.map(number => number.toString());//converting otu's to string
+    
+    var sampleValues = dataSamples[0].sample_values.slice(0, 10); /getting data counts top 10
+    
+    var otuLabels = dataSamples[0].otu_labels.slice(0, 10); /getting labels for OTU's
+    
+    //Setting trace data
     var trace1 = {
       x: sampleValues.reverse(),
       y: otuIdsString.reverse(),
@@ -75,14 +75,14 @@ d3.json(url).then(function(data) {
 
     var data = [trace1];
   
-  var layout = {
-    title: `Plot of Counts vs otu_id for ${subject}`,
-    xaxis: {title: "otu_id"},
-    yaxis: {title: "counts of otu" , type:"category", gridwidth: 2},
-    bargap:0.05
-  };
+    var layout = {
+      title: `Plot of Counts vs otu_id for ${subject}`,
+      xaxis: {title: "otu_id"},
+      yaxis: {title: "counts of otu" , type:"category", gridwidth: 2},
+      bargap:0.05
+    };
 
-  Plotly.newPlot("bar", data, layout);
+    Plotly.newPlot("bar", data, layout);
 
   //*******************creating gauge chart**********************/
   var data = [
@@ -95,11 +95,11 @@ d3.json(url).then(function(data) {
                       {range: [2,4], color: "orange"},
                       {range:[4,7], color: "yellow" },
                       {range:[7,10], color: "lightgreen"}
-              ]
-            },
-
+                    ]
+             },
     }
     ];
+
     var layout = {
       width: 500,
       height: 350,
@@ -119,12 +119,12 @@ d3.json(url).then(function(data) {
       }
     };
 
-    Plotly.newPlot('gauge', data, layout);
+    Plotly.newPlot('gauge', data, layout);//located at div for gauge
 
   //********* Creating Bubble Chart ********************/
 
-  colors = (dataSamples[0].otu_ids).map(data=>(data/3000*255));
-
+  // in color data need to set range of values and colors in rgb.  number (like 0.5) is decimal percent
+  // of full scale.
   var trace1 = {
     x: dataSamples[0].otu_ids,
     y: dataSamples[0].sample_values,
@@ -135,10 +135,10 @@ d3.json(url).then(function(data) {
         ['0.5','rgb(0,255,0)'],
         ['1','rgb(255,0,0)']
           
-          ],
+                  ],
       color: colors,
       size: dataSamples[0].sample_values
-    },
+              },
     text: dataSamples[0].otu_labels
     
   };
@@ -146,15 +146,16 @@ d3.json(url).then(function(data) {
   var data = [trace1];
   
   var layout = {
-    title: 'otu Counts versus otu ID',
+    title: 'otu Counts versus ID Number',
     xaxis: {title:"otu ID"},
     yaxis: {title:"otu Counts in Sample"},
     showlegend: false,
     height: 600,
     width: 800
   };
-  
-  Plotly.newPlot('bubble', data, layout);
+  var config = {responsive: true}
+
+  Plotly.newPlot('bubble', data, layout, config);
 
 });
 

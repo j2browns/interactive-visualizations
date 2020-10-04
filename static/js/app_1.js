@@ -1,3 +1,8 @@
+//***********************************************/
+//   This additional code is to present summary data
+//  using full data set for the following:
+//  1. Bacteria count versus wash frequency
+//  2. Bacteria count versus gender
 //************************************************/
 //************ Connecting to JSON ****************/
 //Setting path to json
@@ -49,7 +54,7 @@ var data = [trace1];
 
 var layout = {
     title: "Bacteria Count vs Wash Frequency",
-    xaxis: {title: "Washes per Week"},
+    xaxis: {title: "Washes per Week", dtick:1},
     yaxis: {title: "Total Bacteria Count"}
 }
 Plotly.newPlot("wash", data, layout);
@@ -89,7 +94,7 @@ var totalBactGend = bbSamples.map(data => d3.sum(data.sample_values));
 var data = [trace1];
 
 var layout = {
-    title: "Bacteria Count vs GEnder",
+    title: "Bacteria Count vs Gender",
     xaxis: {title: "Test Subject Gender"},
     yaxis: {title: "Total Bacteria Count"}
 };
